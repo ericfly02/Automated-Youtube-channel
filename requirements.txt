@@ -1,0 +1,9 @@
+moviepy
+gTTS
+mutagen
+git+https://github.com/tweepy/tweepy.git
+pandas
+wget
+pytesseract
+pillow
+opencv-python
