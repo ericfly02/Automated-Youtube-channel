@@ -29,13 +29,13 @@ path_to_image = Path('lib\\images\\coinfessions')
 #Array to store all the image names
 filenames = next(walk(path_to_image), (None, None, []))[2]  # [] if no file
 
-
-# Save text from image to "new_text" variable
-path = Path('lib\\images\\coinfessions\\' + filenames[0])
-text = create_text(path)
-words = text.split()
-new_text = " ".join(words[1:])
-create_video(new_text, filenames[0])
+for name in filenames:
+    # Save text from image to "new_text" variable
+    path = Path('lib\\images\\coinfessions\\' + name)
+    text = create_text(path)
+    words = text.split()
+    new_text = " ".join(words[1:])
+    create_video(new_text, name)
 
     
     

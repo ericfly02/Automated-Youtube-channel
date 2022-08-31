@@ -10,10 +10,10 @@ def create_video(text, image_name):
     name = image_name[:-3]
 
     #Define the paths
-    video_path = Path('lib\\video\\coinfessions\\'+name+'mp4')
-    audio_path = Path('lib\\audio\\coinfessions\\'+name+'mp3')
+    video_path = str(Path('lib\\video\\coinfessions\\'+name+'mp4'))
+    audio_path = str(Path('lib\\audio\\coinfessions\\'+name+'mp3'))
     image_path = Path('lib\\images\\coinfessions\\'+image_name)
-    gif_path = Path('lib\\gif\\coinfessions\\'+name+'gif')
+    gif_path = str(Path('lib\\gif\\coinfessions\\'+name+'gif'))
 
     #Create a video from text
     tts = gTTS(text=text, lang='en', slow = False)
@@ -35,15 +35,8 @@ def create_video(text, image_name):
         os.mkdir('lib\\gif\\coinfessions\\')
         image.save(gif_path, duration=audio_length)
 
-    print(gif_path)
     video = editor.VideoFileClip(gif_path)
-
-    try:
-        audio = editor.AudioFileClip(audio_path)
-    except:
-        os.mkdir('lib\\audio\\coinfessions\\')
-        audio = editor.AudioFileClip(audio_path)
-
+    audio = editor.AudioFileClip(audio_path)
     final_video =  video.set_audio(audio)
 
     try:
