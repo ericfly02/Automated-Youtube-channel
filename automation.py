@@ -1,9 +1,16 @@
-import twitterscrapper
+from twitterscrapper import initialize as initialize_twitter
+from image_to_text import initialize as initialize_image
 
 def main():
-    # We get the tweets from the user
-    twitterscrapper.initialize()
+    #Defining user and number of tweets to fetch
+    username = input("Enter the Twitter user: ")
+    no_of_tweets = input("Enter the number of tweets to download: ")
 
+    # We get the tweets from the user
+    initialize_twitter(username, no_of_tweets)
+
+    # We get the text from the images and create the video
+    initialize_image(username)
 
 if __name__ == '__main__':
     main()

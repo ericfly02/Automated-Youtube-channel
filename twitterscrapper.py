@@ -5,7 +5,8 @@ import time
 import os
 import sys
 import wget
-import requests
+import image_to_text
+from pathlib import Path
 
 def getTweetsFromUser(username,no_of_tweets,api):
 	## Fetches Tweets from user with the handle 'username' upto max of 'no_of_tweets' tweets
@@ -14,7 +15,10 @@ def getTweetsFromUser(username,no_of_tweets,api):
 	raw_tweets = api.user_timeline(screen_name=username,include_rts=False,exclude_replies=True)
 
 	last_tweet_id = int(raw_tweets[-1].id-1)
-	
+
+	print('-----------------------------------------------------------')
+	print('|                     TWITTER SCRAPPING                   |')
+	print('-----------------------------------------------------------')
 	print ('\nFetching tweets.....')
 
 	while len(raw_tweets)<no_of_tweets:
@@ -45,43 +49,42 @@ def getTweetMediaURL(all_tweets):
 
 def downloadFiles(media_url,username):
 	print ('\nDownloading Images.....')
-	os.chdir('lib/images/')
 	try:
-		os.mkdir(username)
-		os.chdir(username)
+		Path('lib\\images\\'+username)
 	except:
-		os.chdir(username)
+		os.mkdir('lib\\images\\'+username)
+
 	count = 0
 	for url in media_url:
 		user = username+'_'+str(count)+'.png'
-		wget.download(url, out= user)
+		image_path = Path('lib\\images\\'+username+'\\'+user)
+		if not Path(image_path).is_file():
+			wget.download(url, out= str(image_path))
 		count += 1
 
 
-def initialize():
-    f = open('config.json')
-    data = json.load(f)
+def initialize(username, no_of_tweets):
+	f = open('config.json')
+	data = json.load(f)
 
-    #Pass in our twitter API authentication key
-    auth = tweepy.OAuth1UserHandler(
-        data['consumer_key'], data['consumer_secret'],
-        data['access_token'], data['access_token_secret']
-    )
+	#Pass in our twitter API authentication key
+	auth = tweepy.OAuth1UserHandler(
+		data['consumer_key'], data['consumer_secret'],
+		data['access_token'], data['access_token_secret']
+	)
 
-    #Instantiate the tweepy API
-    api = tweepy.API(auth, wait_on_rate_limit=True)
+	#Instantiate the tweepy API
+	api = tweepy.API(auth, wait_on_rate_limit=True)
 
-    username = input("Enter the Twitter user: ")
-    no_of_tweets = input("Enter the number of tweets to download: ")
+	try:
+		all_tweets = getTweetsFromUser(username,int(no_of_tweets),api)
+		media_URLs = getTweetMediaURL(all_tweets)
+		downloadFiles(media_URLs,username)
 
-    try:
-        all_tweets = getTweetsFromUser(username,int(no_of_tweets),api)
-        media_URLs = getTweetMediaURL(all_tweets)
-        downloadFiles(media_URLs,username)
-        print ('\n\nFinished Downloading.\n')
-
-    except BaseException as e:
-        print('Status Failed On,',str(e))
-        time.sleep(3)
+		print ('\nFinished Downloading.\n\n')
+		
+	except BaseException as e:
+		print('Status Failed On,',str(e))
+		time.sleep(3)
 
 
