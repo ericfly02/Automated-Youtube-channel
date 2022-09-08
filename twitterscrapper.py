@@ -1,11 +1,9 @@
 import tweepy
 import json
-import pandas as pd
 import time
 import os
 import sys
 import wget
-import image_to_text
 from pathlib import Path
 
 def getTweetsFromUser(username,no_of_tweets,api):

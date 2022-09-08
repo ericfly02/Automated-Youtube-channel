@@ -4,8 +4,10 @@ from mutagen.mp3 import MP3
 from PIL import Image
 from pathlib import Path
 import os
+import upload_video
+import time
 
-def create_video(text, image_name, username):
+def create_video(text, image_name, username, count):
 
     name = image_name[:-3]
 
@@ -50,9 +52,12 @@ def create_video(text, image_name, username):
 
     if not Path(video_path).is_file():
         try:
-            final_video.write_videofile(video_path, fps = 60)
+            final_video.write_videofile(video_path, fps = 1)
         except:
             os.mkdir('lib\\video\\'+username+'\\')
-            final_video.write_videofile(video_path, fps = 60)
+            final_video.write_videofile(video_path, fps = 1)
     else:
         print("Video file already exists")
+
+    upload_video.initialize(video_path, name, count)
+    time.sleep(60)

@@ -1,4 +1,3 @@
-from posixpath import split
 from PIL import Image
 from pytesseract import pytesseract
 from pathlib import Path
@@ -38,6 +37,7 @@ def initialize(username):
     #Array to store all the image names
     filenames = next(os.walk(path_to_image), (None, None, []))[2]  # [] if no file
 
+    count = 0
     for name in filenames:
         # Save text from image to "new_text" variable
         print('\n---------------------- '+name+' ----------------------')
@@ -45,7 +45,7 @@ def initialize(username):
         text = create_text(path)
         words = text.split()
         new_text = " ".join(words[1:])
-        create_video(new_text, name, username)
+        create_video(new_text, name, username, count)
 
     
     

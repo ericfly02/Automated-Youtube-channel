@@ -6,4 +6,10 @@ pandas
 wget
 pytesseract
 pillow
-opencv-python
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2
+httplib2
+oauth2client 
+google-auth-httplib2 
+google-auth-oauthlib
