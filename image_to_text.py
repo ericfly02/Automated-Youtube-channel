@@ -2,6 +2,7 @@ from PIL import Image
 from pytesseract import pytesseract
 from pathlib import Path
 import os
+import time
 from text_to_video import create_video
 
 def create_text(path_to_image):
@@ -46,6 +47,9 @@ def initialize(username):
         words = text.split()
         new_text = " ".join(words[1:])
         create_video(new_text, name, username, count)
+
+        #we wait 1 day to upload the next video
+        time.sleep(86400)
 
     
     

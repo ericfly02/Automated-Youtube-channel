@@ -1,6 +1,5 @@
 from twitterscrapper import initialize as initialize_twitter
 from image_to_text import initialize as initialize_image
-from upload_video import initialize as initialize_upload
 
 def main():
     #Defining user and number of tweets to fetch

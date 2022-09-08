@@ -1,38 +1,30 @@
-import datetime
-from Google import Create_Service
-from googleapiclient.http import MediaFileUpload
-
-CLIENT_SECRET_FILE = 'client_secrets.json'
-API_NAME = 'youtube'
-API_VERSION = 'v3'
-SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
-
-service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
-
-request_body = {
-    'snippet': {
-        'categoryI': 19,
-        'title': 'Upload Testing',
-        'description': 'Hello World Description',
-        'tags': ['Travel', 'video test', 'Travel Tips']
-    },
-    'status': {
-        'privacyStatus': 'private',
-        'selfDeclaredMadeForKids': False, 
-    },
-    'notifySubscribers': False
-}
-
-mediaFile = MediaFileUpload('coinfessions_0.MP4')
-
-response_upload = service.videos().insert(
-    part='snippet,status',
-    body=request_body,
-    media_body=mediaFile
-).execute()
+import os
+from  youtube import yt_Class 
+from googleapiclient.errors import HttpError
+from oauth2client.tools import argparser
 
 
-service.thumbnails().set(
-    videoId=response_upload.get('id'),
-    media_body=MediaFileUpload('thumbnail.png')
-).execute()
+def initialize(video_path, name, count):
+  #yt = yt_Class()
+  current_path =str(os.path.abspath(__file__))
+  path = current_path[:-15]
+  path_file = path+video_path
+  argparser.add_argument(path_file)
+  title = name
+  argparser.add_argument(title)
+  description = "anonymous crypto confessions by @illustratealpha"
+  argparser.add_argument(description)
+  category = '24'
+  argparser.add_argument(category)
+  keywords = "anonymous, crypto, confessions, #shorts, #short, #enterpreneur"
+  argparser.add_argument(keywords)
+  privacyStatus = 'private'
+  argparser.add_argument(privacyStatus)
+
+  args = argparser.parse_args()
+  
+  youtube = yt_Class.get_authenticated_service(args)
+  try:
+    yt_Class.initialize_upload(youtube, args)
+  except HttpError as e:
+    print ("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))

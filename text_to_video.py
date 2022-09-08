@@ -5,7 +5,6 @@ from PIL import Image
 from pathlib import Path
 import os
 import upload_video
-import time
 
 def create_video(text, image_name, username, count):
 
@@ -14,7 +13,7 @@ def create_video(text, image_name, username, count):
     #Define the paths
     video_path = str(Path('lib\\video\\'+username+'\\'+name+'mp4'))
     audio_path = str(Path('lib\\audio\\'+username+'\\'+name+'mp3'))
-    image_path = Path('lib\\images\\'+username+'\\'+image_name)
+    image_path = str(Path('lib\\images\\'+username+'\\'+image_name))
     gif_path = str(Path('lib\\gif\\'+username+'\\'+name+'gif'))
 
     #Create a video from text
@@ -60,4 +59,3 @@ def create_video(text, image_name, username, count):
         print("Video file already exists")
 
     upload_video.initialize(video_path, name, count)
-    time.sleep(60)
